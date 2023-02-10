@@ -12,7 +12,6 @@ let operator = '';
 let numbers = [];
 let lastBtn = false;
 let equals = false;
-let equals2 = false;
 let result;
 
 // function to do the basic math
@@ -53,10 +52,10 @@ function operate(operator, numArray) {
 // event listener to add functionality to number buttons
 numberBtn.forEach(button => {
         button.addEventListener('click', () => {
-            if (numbers && equals2) {
+            if (numbers && equals) {
                 numbers = [];
-                equals2 = false;
                 operator = '';
+                equals = false;
             }
             if (display.textContent === '0' || lastBtn) display.textContent = ''; 
             display.textContent += button.textContent;
@@ -68,11 +67,11 @@ numberBtn.forEach(button => {
 // event listener to add functionality to the operator buttons
 operatorBtn.forEach(button => {
     button.addEventListener('click', () => {
-        if (lastBtn) return;
-        if (numbers && equals2) {
+        if (numbers && equals) {
             numbers = [result];
-            operator = '';
-            equals2 = false;
+            operator = button.textContent;
+            equals = false;
+            return
         }
         numbers.push(displayValue);
         if (!operator) operator = button.textContent;
@@ -81,23 +80,21 @@ operatorBtn.forEach(button => {
         numbers = [result];
         operator = button.textContent;
         lastBtn = true;
-        equals = false;
     })
 })   
 
 // event listener to add functionality to equals button
 equalsBtn.addEventListener('click', () => {
-    if (!equals2) {
+    if (!equals) {
         numbers.push(displayValue);
     }
     if (!operator) operator = '+';
     result = operate(operator, numbers);
     display.textContent = Math.round(result * 100000) / 100000;
-    equals = true;
     numbers[0] = result;
     lastBtn = true;
     displayValue = parseFloat(display.textContent);
-    equals2 = true
+    equals = true
 })
 
 // add functionality to clear button
