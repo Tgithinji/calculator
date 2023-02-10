@@ -53,7 +53,7 @@ numberBtn.forEach(button => {
         button.addEventListener('click', () => {
             if (display.textContent === '0' || lastBtn) display.textContent = ''; 
             display.textContent += button.textContent;
-            displayValue = Number(display.textContent);
+            displayValue = parseFloat(display.textContent);
             lastBtn = false;
         });
 })
@@ -61,11 +61,12 @@ numberBtn.forEach(button => {
 // event listener to add functionality to the operator buttons
 operatorBtn.forEach(button => {
     button.addEventListener('click', () => {
+        if (lastBtn) return;
         if (equals) numbers = [];
         numbers.push(displayValue);
         if (!operator) operator = button.textContent;
         let result = operate(operator, numbers);
-        display.textContent = result;
+        display.textContent = Math.round(result * 100000) / 100000;
         numbers = [result];
         operator = button.textContent;
         lastBtn = true;
@@ -75,15 +76,16 @@ operatorBtn.forEach(button => {
 
 // event listener to add functionality to equals button
 equalsBtn.addEventListener('click', () => {
+    // if (lastBtn) return;
     numbers.push(displayValue);
     if (!operator) operator = '+';
     let result = operate(operator, numbers);
-    display.textContent = result;
+    display.textContent = Math.round(result * 100000) / 100000;
     numbers = [result];
     operator = '';
     lastBtn = true;
     equals = true;
-    displayValue = Number(display.textContent);
+    displayValue = parseFloat(display.textContent);
 })
 
 // add functionality to clear button
@@ -95,7 +97,13 @@ clearBtn.addEventListener('click', () => {
 
 // function to add a decimal point to a number
 dotBtn.addEventListener('click', () => {
-    if (display.textContent.indexOf('.') > -1) return
+    if (display.textContent.indexOf('.') > -1 || 
+        display.textContent.indexOf('-') > -1) return;
+    if (lastBtn) {
+        display.textContent = '0.';
+        lastBtn = false;
+        return;
+    }
     display.textContent += dotBtn.textContent; 
 })
 
@@ -103,23 +111,36 @@ dotBtn.addEventListener('click', () => {
 percentageBtn.addEventListener('click', () => {
     let num = display.textContent;
     display.textContent = num / 100;
-    displayValue = Number(display.textContent);
+    displayValue = parseFloat(display.textContent);
 });
 
 // function to make a negative value
 negativeBtn.addEventListener('click', () => {
     const num = display.textContent;
-    if (num === '0' || lastBtn) {
+    if (num === '0') {
+        display.textContent = '0';
+        return
+    }
+    if (lastBtn) {
         display.textContent = '-';
         lastBtn = false;
         return
     }
     if (!num.startsWith('-')) {
         display.textContent = '-' + num;
-        displayValue = Number(display.textContent);
+        displayValue = parseFloat(display.textContent);
     }
     else {
         display.textContent = num.replace('-', '');
-        displayValue = Number(display.textContent);
+        displayValue = parseFloat(display.textContent);
     }
+})
+
+// function to implement the backspace button
+const backspaceBtn = document.querySelector('.backspace');
+backspaceBtn.addEventListener('click', () => {
+    let num = display.textContent;
+    num = num.slice(0, -1);
+    if (!num) display.textContent = '0';
+    else display.textContent = num;
 })
