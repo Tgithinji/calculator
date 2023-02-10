@@ -85,9 +85,7 @@ operatorBtn.forEach(button => {
 
 // event listener to add functionality to equals button
 equalsBtn.addEventListener('click', () => {
-    if (!equals) {
-        numbers.push(displayValue);
-    }
+    if (!equals) numbers.push(displayValue);
     if (!operator) operator = '+';
     result = operate(operator, numbers);
     display.textContent = Math.round(result * 100000) / 100000;

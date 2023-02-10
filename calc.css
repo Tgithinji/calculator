@@ -1,0 +1,70 @@
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    background-color: #B5E2CF;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 360px;
+    height: 460px;
+    margin-top: 50px;
+}
+
+.display {
+    height: 20%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 10px;
+    font-size: 3rem;
+    font-weight: bold;
+    background-color: #efefef;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 80%;
+}
+
+.buttons button {
+    border-radius: 10%;
+    font-size: 1.5rem;
+}
+
+.buttons .button {
+    background-color: #efefef;
+}
+
+.operator, .percent {
+    background-color: #502C8C;
+    color: #efefef;
+}
+.negative, .dot, .backspace, .clear {
+    background-color: #C23D09;
+}
+.equals {
+    background-color: #000382;
+    font-weight: bolder;
+    color: #fefefe;
+}
+
+.footer {
+    justify-self: baseline;
+    font-size: 1.2rem;
+    margin-top: 30px;
+}
