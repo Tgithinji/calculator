@@ -12,6 +12,8 @@ let operator = '';
 let numbers = [];
 let lastBtn = false;
 let equals = false;
+let equals2 = false;
+let result;
 
 // function to do the basic math
 function add(numArray) {
@@ -51,6 +53,11 @@ function operate(operator, numArray) {
 // event listener to add functionality to number buttons
 numberBtn.forEach(button => {
         button.addEventListener('click', () => {
+            if (numbers && equals2) {
+                numbers = [];
+                equals2 = false;
+                operator = '';
+            }
             if (display.textContent === '0' || lastBtn) display.textContent = ''; 
             display.textContent += button.textContent;
             displayValue = parseFloat(display.textContent);
@@ -62,10 +69,14 @@ numberBtn.forEach(button => {
 operatorBtn.forEach(button => {
     button.addEventListener('click', () => {
         if (lastBtn) return;
-        if (equals) numbers = [];
+        if (numbers && equals2) {
+            numbers = [result];
+            operator = '';
+            equals2 = false;
+        }
         numbers.push(displayValue);
         if (!operator) operator = button.textContent;
-        let result = operate(operator, numbers);
+        result = operate(operator, numbers);
         display.textContent = Math.round(result * 100000) / 100000;
         numbers = [result];
         operator = button.textContent;
@@ -76,16 +87,17 @@ operatorBtn.forEach(button => {
 
 // event listener to add functionality to equals button
 equalsBtn.addEventListener('click', () => {
-    // if (lastBtn) return;
-    numbers.push(displayValue);
+    if (!equals2) {
+        numbers.push(displayValue);
+    }
     if (!operator) operator = '+';
-    let result = operate(operator, numbers);
+    result = operate(operator, numbers);
     display.textContent = Math.round(result * 100000) / 100000;
-    numbers = [result];
-    operator = '';
-    lastBtn = true;
     equals = true;
+    numbers[0] = result;
+    lastBtn = true;
     displayValue = parseFloat(display.textContent);
+    equals2 = true
 })
 
 // add functionality to clear button
