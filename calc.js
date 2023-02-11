@@ -57,7 +57,8 @@ numberBtn.forEach(button => {
                 operator = '';
                 equals = false;
             }
-            if (display.textContent === '0' || lastBtn) display.textContent = ''; 
+            if (display.textContent === '0' || lastBtn) display.textContent = '';
+            if (display.textContent.length === 12) return; 
             display.textContent += button.textContent;
             displayValue = parseFloat(display.textContent);
             lastBtn = false;
@@ -76,7 +77,7 @@ operatorBtn.forEach(button => {
         numbers.push(displayValue);
         if (!operator) operator = button.textContent;
         result = operate(operator, numbers);
-        display.textContent = Math.round(result * 100000) / 100000;
+        display.textContent = Math.round(result * 10000000000) / 10000000000;
         numbers = [result];
         operator = button.textContent;
         lastBtn = true;
@@ -88,11 +89,12 @@ equalsBtn.addEventListener('click', () => {
     if (!equals) numbers.push(displayValue);
     if (!operator) operator = '+';
     result = operate(operator, numbers);
-    display.textContent = Math.round(result * 100000) / 100000;
+    display.textContent = Math.round(result * 10000000000) / 10000000000;
+    if (display.textContent > 14) display.style.fontSize = '1.8rem';
     numbers[0] = result;
     lastBtn = true;
     displayValue = parseFloat(display.textContent);
-    equals = true
+    equals = true;
 })
 
 // add functionality to clear button
@@ -105,7 +107,8 @@ clearBtn.addEventListener('click', () => {
 // function to add a decimal point to a number
 dotBtn.addEventListener('click', () => {
     if (display.textContent.indexOf('.') > -1 || 
-        display.textContent.indexOf('-') > -1) return;
+        display.textContent.indexOf('-') > -1 ||
+        display.textContent.length === 12) return;
     if (lastBtn) {
         display.textContent = '0.';
         lastBtn = false;
@@ -155,6 +158,7 @@ backspaceBtn.addEventListener('click', () => {
 
 // Keyboard support feature
 window.addEventListener('keydown', (e) => {
+    e.preventDefault();
     const button = document.querySelector(`button[data-key="${e.key}"]`);
     if (!button) return;
     button.click();
