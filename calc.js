@@ -125,7 +125,7 @@ percentageBtn.addEventListener('click', () => {
 negativeBtn.addEventListener('click', () => {
     const num = display.textContent;
     if (num === '0') {
-        display.textContent = '0';
+        display.textContent = '-';
         return
     }
     if (lastBtn) {
@@ -140,6 +140,7 @@ negativeBtn.addEventListener('click', () => {
     else {
         display.textContent = num.replace('-', '');
         displayValue = parseFloat(display.textContent);
+        if (!display.textContent) display.textContent = '0'
     }
 })
 
@@ -150,4 +151,11 @@ backspaceBtn.addEventListener('click', () => {
     num = num.slice(0, -1);
     if (!num) display.textContent = '0';
     else display.textContent = num;
+})
+
+// Keyboard support feature
+window.addEventListener('keydown', (e) => {
+    const button = document.querySelector(`button[data-key="${e.key}"]`);
+    if (!button) return;
+    button.click();
 })
